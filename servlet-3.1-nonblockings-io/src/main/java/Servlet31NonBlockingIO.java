@@ -1,13 +1,10 @@
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.Arrays;
 
-@WebServlet(urlPatterns = {"/non-blocking-servlet"}, asyncSupported = true)
-public class ServletNonBlocking extends HttpServlet {
+@WebServlet(urlPatterns = {"/servlet-3-1-nonblockings-io"}, asyncSupported = true)
+public class Servlet31NonBlockingIO extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -22,19 +19,19 @@ public class ServletNonBlocking extends HttpServlet {
                 int length = -1;
                 byte data[] = new byte[1024];
                 while (inputStream.isReady() && (length = inputStream.read(data)) != -1) {
-                    // process the input data
+                    // read the input data
                 }
             }
 
             @Override
             public void onAllDataRead() {
-                // Invoked when all data for the current request has been read.
+                // invoked when all data for the current request has been read.
                 context.complete();
             }
 
             @Override
             public void onError(Throwable t) {
-                // Invoked when an error occurs processing the request.
+                // invoked when an error occurs processing the request.
                 context.complete();
             }
         });
@@ -45,7 +42,8 @@ public class ServletNonBlocking extends HttpServlet {
             public void onWritePossible() throws IOException {
                 if (output.isReady()) {
                     byte[] data = new byte[1024];
-                    // process the output data
+
+                    // write the output data
                     output.write(data);
                 }
             }

@@ -1,15 +1,10 @@
-import javax.servlet.AsyncContext;
-import javax.servlet.AsyncEvent;
-import javax.servlet.AsyncListener;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/async-servlet", asyncSupported = true)
-public class ServletAsync extends HttpServlet {
+@WebServlet(urlPatterns = "/servlet-3-0-asynchronous-processing", asyncSupported = true)
+public class Servlet30AsynchronousProcessing extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -19,20 +14,23 @@ public class ServletAsync extends HttpServlet {
         asyncContext.addListener(new AsyncListener() {
             @Override
             public void onStartAsync(AsyncEvent event) throws IOException {
-                // notify that a new asynchronous cycle is being initiated.
+                // notifies that a new asynchronous cycle is being initiated.
             }
+            
             @Override
             public void onComplete(AsyncEvent event) throws IOException {
-                // notify that an asynchronous operation has been completed.
+                // notifies that an asynchronous operation has been completed.
             }
+            
             @Override
             public void onTimeout(AsyncEvent event) throws IOException {
-                // notify that an asynchronous operation has timed out.
+                // notifies that an asynchronous operation has timed out.
                 event.getAsyncContext().complete();
             }
+            
             @Override
             public void onError(AsyncEvent event) throws IOException {
-                // notify that an asynchronous operation has failed to complete.
+                // notifies that an asynchronous operation has failed to complete.
             }
         });
 
@@ -40,9 +38,11 @@ public class ServletAsync extends HttpServlet {
             @Override
             public void run() {
                 HttpServletRequest request = (HttpServletRequest) asyncContext.getRequest();
-                // read from the request
+                // read the input data from the request.
+
                 HttpServletResponse response = (HttpServletResponse) asyncContext.getResponse();
-                // write to the response
+                // write the output data from the response.
+
                 asyncContext.complete();
             }
         });
